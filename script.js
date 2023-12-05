@@ -7,27 +7,47 @@
 
 //win sequences
 
-// 1, 2, 3, 4, 5, 6, 7, 8, 9 row
-// 9, 8, 7, 6, 5, 4, 3, 2, 1 row rev
-// 1, 4, 7, 2, 5, 8, 3, 6, 9 col 
-// 7, 4, 1, 8, 5, 2, 9, 6, 3 col rev
-// 3, 5, 7, 7, 5, 3, 1, 5, 9, 9, 5, 1 diag
+// [1, 2, 3], [4, 5, 6], [7, 8, 9] row
+// [9, 8, 7], [6, 5, 4], [3, 2, 1] row rev
+// [1, 4, 7], [2, 5, 8], [3, 6, 9] col 
+// [7, 4, 1], [8, 5, 2], [9, 6, 3] col rev
+// [3, 5, 7], [7, 5, 3], [1, 5, 9], [9, 5, 1] diag
 
 //9 moves total
 
 //algorythm
 
 //player makes a move
-  //function that takes number 
-  //and pushes it into an array
-//his move asigned to a certain 
-//cell number
-  //number pushed to an array of cell nums
+  //cell becomes inactive
 
-  //sequence of numbers in array checked
-  //for corresponding win sequence
-  //if sequence is not achieved game continues
-  //otherwise there is a win
+  //his move asigned to a certain 
+  //cell number
+
+  //function that takes the number 
+  //and pushes it into 
+  //player moves array
+
+  //function that takes palyer's
+  //array
+
+  //checks if it's length is less
+  //than 3
+
+    //return if it is
+
+    //else if it is >= 3
+
+     //than check if sequence in 
+     //player's array is equal to
+     //win sequence
+     
+     //return 'player# is a winner' 
+     //string if it is
+
+     //otherwise 
+  
+
+
 
 //cell becomes inactive for interaction
 
@@ -37,10 +57,15 @@
 //game ends when total moves count
 //reaches 9 (while i<=9)
 
-const Gameboard = {
-  gameboard: [1, 2, 3, 
-              4, 5, 6, 
-              7, 8, 9],
+function counter () {
+  const moveCounter = [];
+
+  const addMove = () => {
+    moveCounter.push(1);
+  }
+  const getCounter = () => moveCounter;
+
+  return {getCounter, addMove};
 }
 
 function player (name) {
@@ -49,17 +74,48 @@ function player (name) {
   const getMoves = () => moves;
   const makeMove = (move) => moves.push(move);
 
+  if (moves.length > 3) {
+    moves.shift();
+  }
+
+  function ifWin (arr) {
+    if (arr.length < 3) {
+      return;
+    } else if (arr.length === 3) {
+      defineWin(arr);
+    }
+  }
+
   return {playerName, getMoves, makeMove};
 }
 
-function defineWin () {
+function defineWin (allMoves) {
+  let playerMoves = allMoves;
   const winSeq = [
-   [1, 2, 3], [4, 5, 6], [7, 8, 9],
-   [9, 8, 7], [6, 5, 4], [3, 2, 1], 
-   [1, 4, 7], [2, 5, 8], [3, 6, 9],
-   [7, 4, 1], [8, 5, 2], [9, 6, 3], 
-   [3, 5, 7], [7, 5, 3], [1, 5, 9], [9, 5, 1] 
-  ];
+                  [0, 1, 2],
+                  [3, 4, 5],
+                  [6, 7, 8],
+                  [0, 3, 6],
+                  [1, 4, 7],
+                  [2, 5, 8],
+                  [0, 4, 8],
+                  [2, 4, 6]
+                ];
+
+/*   for (let i = 0; i < winSeq.length; i++){
+    let winSeqValue = winSeq[i];
+    for (let i = 0; i < playerMoves.length; i++) {
+      let sum = playerMoves[i] + playerMoves[i + 1] + playerMoves [i + 2];
+      if (winSeqValue !== sum) {
+        return;
+      } else { 
+        'there is a winner';
+      }
+    }
+  } */
+}
+  const player1 = player('player1');
+  const player2 = player('player2');
 
   /*
   6, 15, 24, 12, 18, 
@@ -71,7 +127,7 @@ function defineWin () {
   moves[i+2];
   */
 
-  for (let i = 0; i < winSeq.length; i++) {
+/*   for (let i = 0; i < winSeq.length; i++) {
     givenArray = winSeq[i];
     let sum = 0;
     for (let i = 0; i < winSeq[i].length; i++) {
@@ -79,15 +135,13 @@ function defineWin () {
     }
     console.log(sum);
     sum = 0;
-  } //loop that sums array values
+  } */ //loop that sums array values
     //in an array of arrays
 
-}
 
-defineWin();
 
-const player1 = player('player1');
-const player2 = player('player2');
+//defineWin();
+
 
 
 
