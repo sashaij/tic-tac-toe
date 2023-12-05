@@ -58,22 +58,44 @@
 //reaches 9 (while i<=9)
 
 function counter () {
-  const moveCounter = [];
+  const moveCounter = []; //moves counter
 
   const addMove = () => {
-    moveCounter.push(1);
+    moveCounter.push(1); 
   }
   const getCounter = () => moveCounter;
 
   return {getCounter, addMove};
 }
 
+const newCounter = counter();
+
+function checkOver () {
+  const moveCount = newCounter.getCounter();
+  const ifOver = () => {
+    if (moveCount.length === 9) {    //game over if 
+      console.log('Tie. Game over'); //count reaches 9
+    } else {
+      console.log('Continue');
+    }
+  }
+
+  return {ifOver};
+}
+
 function player (name) {
   const playerName = name;
   const moves = [];
   const getMoves = () => moves;
-  const makeMove = (move) => moves.push(move);
+  const defineOver = checkOver();
+  const makeMove = (move) => {
+    moves.push(move);
+    newCounter.addMove(); //adds moves to the counter;
+    console.log(defineOver.ifOver()); //define if 
+  }                     //moves count is reached
+                        //when player makes a move
 
+  
   if (moves.length > 3) {
     moves.shift();
   }
