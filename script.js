@@ -83,22 +83,46 @@ function checkOver () {
   return {ifOver};
 }
 
+function winCondition () {
+    const winSeq = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+
+  const getCondition = () =>  winSeq;
+  return {getCondition};
+}
+
+const newCondition = winCondition();
+
 function player (name) {
+
   const playerName = name;
   const moves = [];
   const getMoves = () => moves;
   const defineOver = checkOver();
+  const checkWin = defineWin();
   const makeMove = (move) => {
     moves.push(move);
     newCounter.addMove(); //adds moves to the counter;
-    console.log(defineOver.ifOver()); //define if 
+    console.log('if the game is over: ' + defineOver.ifOver()); //define if 
+    if (moves.length > 3) {
+      moves.shift();              
+    }
+    for (let i = 0; i < newCondition.getCondition().length; i++) {
+      const checkOne = checkWin.compareArrays(newCondition.getCondition()[i], moves);  //check every element of win to correspond 
+      const checkTwo = checkWin.ifTrue(checkOne);
+      console.log('if two arrays are equal: ' + checkTwo);
+    }         //player's moves array
+    
   }                     //moves count is reached
                         //when player makes a move
-
-  
-  if (moves.length > 3) {
-    moves.shift();
-  }
 
   function ifWin (arr) {
     if (arr.length < 3) {
@@ -108,21 +132,27 @@ function player (name) {
     }
   }
 
-  return {playerName, getMoves, makeMove};
+  return {playerName, getMoves, makeMove, ifWin};
 }
 
-function defineWin (allMoves) {
-  let playerMoves = allMoves;
-  const winSeq = [
-                  [0, 1, 2],
-                  [3, 4, 5],
-                  [6, 7, 8],
-                  [0, 3, 6],
-                  [1, 4, 7],
-                  [2, 5, 8],
-                  [0, 4, 8],
-                  [2, 4, 6]
-                ];
+function defineWin () {
+  const compareArrays = (a, b) => 
+    a.length === b.length &&
+    a.every((element, index) => element === b[index]);
+
+    const ifTrue = function (isTrue) {isTrue ? console.log("Win") : console.log('not yet')};
+
+   return {compareArrays, ifTrue};   
+  }
+
+
+  const player1 = player('player1');
+  const player2 = player('player2');
+
+  player1.makeMove(0);
+  player1.makeMove(1);
+  player1.makeMove(2);
+
 
 /*   for (let i = 0; i < winSeq.length; i++){
     let winSeqValue = winSeq[i];
@@ -135,9 +165,7 @@ function defineWin (allMoves) {
       }
     }
   } */
-}
-  const player1 = player('player1');
-  const player2 = player('player2');
+  
 
   /*
   6, 15, 24, 12, 18, 
