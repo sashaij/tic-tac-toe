@@ -121,7 +121,7 @@ function Gameboard () {
     return {getBoard};
 }
 
-const playerArr = [0, 4, 5];
+const playerArr = [0, 4, 8];
 
 function testWin (arr) {
     const board = [
@@ -132,44 +132,130 @@ function testWin (arr) {
     let testArr = arr;
     let formArr = [];
 
-    const comapareArrs = () => {
-      if ( formArr.length < 3) {
-        return
-      } 
+    const compareArrays = (a, b) => 
+    a.length === b.length &&
+    a.every((element, index) => element === b[index]);
       
-    }
+    const getBoard = () => board;
+
+    return {getBoard, compareArrays};
+}
+
+const newTest = testWin();
+
+
+function formSequences () {
+
+  const gameBoard = newTest.getBoard();
+  let seqArr = [];
+  let subSeqArr = [];
+
+  const pushAndEmpty = function () {
+    seqArr.push(subSeqArr);
+    subSeqArr = [];
+  }
+
+  for (i = 0; i < gameBoard.length; i++) {
+    seqArr.push(gameBoard[i]);
+  } //row
+
+  for (i = 0; i < gameBoard.length; i++) {
+    seqArr.push(gameBoard[i].reverse());
+  } //row reverse
+
+
+  for (let i = 0; i < gameBoard.length; i++) { 
+    for (let j = 0; j < gameBoard[i].length; j++) {
+        subSeqArr.push(gameBoard[j][i]); }
+        pushAndEmpty();
+}  //arr from col
+
+ 
+  for (let i = 0; i < gameBoard.length; i++) { 
+    for (let j = gameBoard[i].length - 1; j >=0 ; j--) {
+        subSeqArr.push(gameBoard[j][i]); }
+        pushAndEmpty();
+} //arr from col reverse 
+    
+for (let i = 0; i < gameBoard.length; i++) {
+    subSeqArr.push(gameBoard[i][i]) } //arr from diag
+
+  pushAndEmpty(); 
+
+  for (let i = gameBoard.length; i > 0; i--) {
+    subSeqArr.push(gameBoard[i-1][i-1]);} //arr from diag reverse
+  pushAndEmpty();
+//itter diag right-left top-bottom
+
+for (let i = 0; i < gameBoard.length; i++) {
+    let incl = gameBoard.length - 1 - i;
+    subSeqArr.push(gameBoard[i][incl]);
+} //arr from diag
+
+pushAndEmpty();
+//itter diag right-left bottom-top
+
+for (let j = 0; j < 1; j++){
+    inter = 0;
+    for (let i = gameBoard.length - 1; i >= 0; i--) {
+    subSeqArr.push(gameBoard[i][inter]);
+    inter++;
+}
+} //arr from diag reverse
+
+pushAndEmpty();
+
+const getSeq = () => seqArr;
+
+return {getSeq};
 
 }
+
+const winSequences = formSequences();
+
+
+//test for win
+for (i = 0; i < winSequences.getSeq().length; i++) {
+  const winBool = newTest.compareArrays(winSequences.getSeq()[i], playerArr);
+  //console.log(winBool);
+  if (winBool === true) {
+    console.log('You win');
+  }
+}
+
+
+console.log(winSequences.getSeq());
+
 
 //itter through col
 /* 
   for (let i = 0; i < gameBoard.length; i++) { 
       for (let j = 0; j < gameBoard[i].length; j++) {
-          otherArr.push(gameBoard[j][i]); }
+          subSeqArr.push(gameBoard[j][i]); }
   }
 */
 //itter through col reverse
 /* 
   for (let i = gameBoard.length; i >0 ; i--) { 
     for (let j = 0; j < gameBoard[i-1].length; j++) {
-        otherArr.push(gameBoard[j][i-1]); }
+        subSeqArr.push(gameBoard[j][i-1]); }
   }
 */
 //itter diag left-right top-bottom
 /* 
 for (let i = 0; i < gameBoard.length; i++) {
-    otherArr.push(gameBoard[i][i]) }
+    subSeqArr.push(gameBoard[i][i]) }
 */
 //itter diag left-right bottom-top
 /* 
   for (let i = gameBoard.length; i > 0; i--) {
-    otherArr.push(gameBoard[i-1][i-1]);}
+    subSeqArr.push(gameBoard[i-1][i-1]);}
 */
 //itter diag right-left top-bottom
 /* 
 for (let i = 0; i < gameBoard.length; i++) {
     let incl = gameBoard.length - 1 - i;
-    otherArr.push(gameBoard[i][incl]);
+    subSeqArr.push(gameBoard[i][incl]);
 }
 */
 //itter diag right-left bottom-top
@@ -177,7 +263,7 @@ for (let i = 0; i < gameBoard.length; i++) {
 for (let j = 0; j < 1; j++){
     inter = 0;
     for (let i = gameBoard.length - 1; i >= 0; i--) {
-    otherArr.push(gameBoard[i][inter]);
+    subSeqArr.push(gameBoard[i][inter]);
     inter++;
 }
 }
