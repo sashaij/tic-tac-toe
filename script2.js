@@ -116,7 +116,7 @@ function Gameboard () {
 
     const getBoard = () => board;
 
-    
+    //function that counts overall turns
 
     return {getBoard};
 }
@@ -227,49 +227,59 @@ for (i = 0; i < winSequences.getSeq().length; i++) {
 console.log(winSequences.getSeq());
 
 
-//itter through col
-/* 
-  for (let i = 0; i < gameBoard.length; i++) { 
-      for (let j = 0; j < gameBoard[i].length; j++) {
-          subSeqArr.push(gameBoard[j][i]); }
-  }
-*/
-//itter through col reverse
-/* 
-  for (let i = gameBoard.length; i >0 ; i--) { 
-    for (let j = 0; j < gameBoard[i-1].length; j++) {
-        subSeqArr.push(gameBoard[j][i-1]); }
-  }
-*/
-//itter diag left-right top-bottom
-/* 
-for (let i = 0; i < gameBoard.length; i++) {
-    subSeqArr.push(gameBoard[i][i]) }
-*/
-//itter diag left-right bottom-top
-/* 
-  for (let i = gameBoard.length; i > 0; i--) {
-    subSeqArr.push(gameBoard[i-1][i-1]);}
-*/
-//itter diag right-left top-bottom
-/* 
-for (let i = 0; i < gameBoard.length; i++) {
-    let incl = gameBoard.length - 1 - i;
-    subSeqArr.push(gameBoard[i][incl]);
-}
-*/
-//itter diag right-left bottom-top
-/* 
-for (let j = 0; j < 1; j++){
-    inter = 0;
-    for (let i = gameBoard.length - 1; i >= 0; i--) {
-    subSeqArr.push(gameBoard[i][inter]);
-    inter++;
-}
-}
-*/
-
 //player
+
+function GameFlow (
+  playerOneName = 'Player One',
+  playerTwoName = 'Player Two'
+) {
+  //const board = Gameboard();
+
+  const players = [
+    {
+      name: playerOneName,
+      mark: 'x',
+      moves: [],
+    },
+    {
+      name: playerTwoName,
+      mark: 'o',
+      moves: [],
+    },
+  ];
+
+  let activePlayer = players[0];
+
+  const switchPlayer = () => {
+    activePlayer = activePlayer === players[0] ? players[1] : players[0];
+  };
+
+  const getActivePlayer = () => activePlayer;
+
+  const makeMove = (move) => {
+    activePlayer.moves.push(move);
+    switchPlayer();
+  }
+
+  const getPlayerMoves = () => activePlayer.moves;
+  
+
+  return {getActivePlayer, makeMove, getPlayerMoves}
+}
+
+const game = GameFlow();
+
+game.makeMove(4);
+game.makeMove(6);
+game.makeMove(7);
+game.makeMove(2);
+game.makeMove(3);
+game.makeMove(5);
+game.makeMove(8);
+game.makeMove(0);
+game.makeMove(1);
+
+console.log(game.getPlayerMoves());
 
 //game flow
 
