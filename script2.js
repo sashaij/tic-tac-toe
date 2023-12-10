@@ -101,24 +101,40 @@ Remember, the key to learning is not just in writing code but also in understand
 
 
 //gameboard
+const game = GameFlow();
+
+
 function Gameboard () {
     const rows = 3;
     const columns = 3;
     const board = [];
 
 
-    for (let i = 0; i < rows; i++) {
+    /* for (let i = 0; i < rows; i++) {
       board [i] = [];
       for (let j = 0; j <columns; j++) {
         board[i].push(Cell());
       }
+    } */
+
+    const fillBoard = (num) => board.push(num);
+
+    //function that defines if 
+    //rounds quantity is exceeded and 
+    //round is over
+
+    const ifEnd = () => {
+      if (board.length >= 9) {
+        console.log('Game over');
+      }
     }
 
     const getBoard = () => board;
+    const emptyBoard = () => board = [];
 
     //function that counts overall turns
 
-    return {getBoard};
+    return {getBoard, fillBoard, emptyBoard, ifEnd};
 }
 
 const playerArr = [0, 4, 8];
@@ -216,14 +232,15 @@ const winSequences = formSequences();
 
 //test for win
 for (i = 0; i < winSequences.getSeq().length; i++) {
-  const winBool = newTest.compareArrays(winSequences.getSeq()[i], playerArr);
+  const winBool = newTest.compareArrays(winSequences.getSeq()[i], game.getPlayerMoves());
   //console.log(winBool);
   if (winBool === true) {
-    console.log('You win');
+    console.log(`${game.getPlayerName()} is a winner.`);
   }
 }
 
 
+console.log('win seq: ');
 console.log(winSequences.getSeq());
 
 
@@ -255,31 +272,64 @@ function GameFlow (
   };
 
   const getActivePlayer = () => activePlayer;
-
-  const makeMove = (move) => {
-    activePlayer.moves.push(move);
-    switchPlayer();
+  const newGameBoard = Gameboard();
+  //add moves to the moves array 
+  //and switch player
+  
+  const resetAll = () => { //reset all to default
+    activePlayer = players[0];
+    players[0].moves = 
+    players[1].moves = [];
+    newGameBoard.emptyBoard();
   }
 
+  //
+  const receivePlayersMoves = (i) => players[i].moves;
+  //
+  
+  const printTurn = () => console.log(`It's ${activePlayer.name}'s move now. Make a move`);
+  const getPlayerName = () => activePlayer.name;
   const getPlayerMoves = () => activePlayer.moves;
   
+  const makeMove = (move) => {
+    activePlayer.moves.push(move);
+    newGameBoard.fillBoard(move);
+    console.log('overall moves: ' + newGameBoard.getBoard());
+    
+    if (activePlayer.moves.length > 3) {   //delete first item in
+      activePlayer.moves.shift();   //in moves array if it exceeds
+    }                              //three 
+    newGameBoard.ifEnd();
+    console.log('playerdef moves: ' + getPlayerMoves());
+    switchPlayer();
+    printTurn();
+  } 
+  
 
-  return {getActivePlayer, makeMove, getPlayerMoves}
+  return {getPlayerName, getActivePlayer, makeMove, getPlayerMoves, printTurn,receivePlayersMoves}
 }
 
-const game = GameFlow();
+game.printTurn();
+const plMoves = game;
 
-game.makeMove(4);
-game.makeMove(6);
-game.makeMove(7);
-game.makeMove(2);
-game.makeMove(3);
-game.makeMove(5);
-game.makeMove(8);
-game.makeMove(0);
+const putMark = (num) => {
+  game.makeMove(num);
+  
+  console.log('pl moves: ' + plMoves.getPlayerMoves());
+};
+
+
+/* game.makeMove(0);
 game.makeMove(1);
+game.makeMove(4);
+game.makeMove(2);
+game.makeMove(8);
+game.makeMove(5);
+game.makeMove(7);
+game.makeMove(9);
+game.makeMove(6); */
 
-console.log(game.getPlayerMoves());
+console.log('player moves: ' + game.getPlayerMoves());
 
 //game flow
 
