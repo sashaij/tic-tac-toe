@@ -140,27 +140,49 @@ function Gameboard () {
 const playerArr = [0, 4, 8];
 
 function testWin (arr) {
-    const board = [
+    const sequences = [
       [0, 1, 2],
       [3, 4, 5],
-      [6, 7, 8],   
-    ]
-    let testArr = arr;
-    let formArr = [];
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],   
+    ];
 
-    const compareArrays = (a, b) => 
+    let testArr = arr;
+
+    for(let i = 0; i < sequences.length; i++){
+      for(let j = 0; i < sequences[j].length; i++) {
+        for (let x = 0; x < testArr.length; i++){
+          if (sequences[i][j] === testArr[x]) {
+            countArr.push(countArr[x]);
+          }
+        }
+      }
+    }
+
+    let countArr = [];
+
+    const testForWin = () => {
+      if (countArr.length === 3) {
+        console.log(`${game.getActivePlayer} is a winner.`);
+      }
+    }
+/*     const compareArrays = (a, b) => 
     a.length === b.length &&
     a.every((element, index) => element === b[index]);
       
     const getBoard = () => board;
-
-    return {getBoard, compareArrays};
+ */
+    return {testForWin};
 }
 
-const newTest = testWin();
+const newTest = testWin(game.getPlayerMoves);
 
 
-function formSequences () {
+/* function formSequences () {
 
   const gameBoard = newTest.getBoard();
   let seqArr = [];
@@ -225,23 +247,20 @@ const getSeq = () => seqArr;
 
 return {getSeq};
 
-}
+} */
 
-const winSequences = formSequences();
+//const winSequences = formSequences();
 
 
-//test for win
+/* //test for win
 for (i = 0; i < winSequences.getSeq().length; i++) {
   const winBool = newTest.compareArrays(winSequences.getSeq()[i], game.getPlayerMoves());
   //console.log(winBool);
   if (winBool === true) {
     console.log(`${game.getPlayerName()} is a winner.`);
   }
-}
+} */
 
-
-console.log('win seq: ');
-console.log(winSequences.getSeq());
 
 
 //player
@@ -301,6 +320,7 @@ function GameFlow (
     }                              //three 
     newGameBoard.ifEnd();
     console.log('playerdef moves: ' + getPlayerMoves());
+    newTest.testForWin();
     switchPlayer();
     printTurn();
   } 
