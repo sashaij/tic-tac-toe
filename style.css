@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Silkscreen&display=swap');
+
+html {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    gap: 50px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.display {
+    color: #000;
+    font-size: 2rem;
+    font-family: 'Silkscreen', sans-serif, Arial, Helvetica, sans-serif;
+}
+
+.grid-body {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 2px;
+    height: 500px;
+    width: 500px;
+    background-color: bisque;
+}
+
+.grid-cell {
+    background-color: burlywood;
+}
+
+
+.new-game {
+  background-color: #fff000;
+  border-radius: 12px;
+  color: #000;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 10px 15px;
+  text-align: center;
+  transition: 200ms;
+  width: 150px;
+  box-sizing: border-box;
+  border: 2px solid black;
+  font-size: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.new-game:not(:disabled):hover,
+.new-game:not(:disabled):focus {
+  outline: 0;
+  background: #f4e603;
+  box-shadow: 0 0 0 2px rgba(0,0,0,.2), 0 3px 8px 0 rgba(0,0,0,.15);
+}
+
+.new-game:disabled {
+  filter: saturate(0.2) opacity(0.5);
+  -webkit-filter: saturate(0.2) opacity(0.5);
+  cursor: not-allowed;
+}
