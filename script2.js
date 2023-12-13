@@ -4,14 +4,6 @@
 //      4|5|6
 //      7|8|9
 
-//win sequences
-
-// [1, 2, 3], [4, 5, 6], [7, 8, 9] row
-// [9, 8, 7], [6, 5, 4], [3, 2, 1] row rev
-// [1, 4, 7], [2, 5, 8], [3, 6, 9] col 
-// [7, 4, 1], [8, 5, 2], [9, 6, 3] col rev
-// [3, 5, 7], [7, 5, 3], [1, 5, 9], [9, 5, 1] diag
-
 //9 moves total
 
 //algorythm
@@ -107,7 +99,7 @@ Remember, the key to learning is not just in writing code but also in understand
 function Gameboard () {
     const rows = 3;
     const columns = 3;
-    const board = [];
+    let board = [];
 
 
     /* for (let i = 0; i < rows; i++) {
@@ -120,7 +112,7 @@ function Gameboard () {
     const fillBoard = (num) => board.push(num);
 
     //function that defines if 
-    //rounds quantity is exceeded and 
+    //moves quantity is exceeded and 
     //round is over
 
     const ifEnd = () => {
@@ -138,9 +130,9 @@ function Gameboard () {
 }
 
 
+//function to check if there is a winner
 const whoWin = function (arr) {
-  const sequences = [
-    [0, 1, 2],
+  const sequences = [  
     [3, 4, 5],
     [6, 7, 8],
     [0, 3, 6],
@@ -167,7 +159,7 @@ const whoWin = function (arr) {
       for(let i = 0; i < sequences.length; i++){
         arrBool = arrComparison(sequences[i], testArr);
         if (arrBool === true) {
-            console.log('Player is a winner');
+            console.log(`${game.getActivePlayer().name} is a winner.`);
       }
     }
   }
@@ -177,7 +169,11 @@ const whoWin = function (arr) {
 
 const game = GameFlow();
 
-const newTest = whoWin(game.getPlayerMoves());
+let newTest;
+
+const newGame = () => {
+  game.resetAll();
+}
 
 
 /* function formSequences () {
@@ -267,7 +263,6 @@ function GameFlow (
   playerOneName = 'Player One',
   playerTwoName = 'Player Two'
 ) {
-  //const board = Gameboard();
 
   const players = [
     {
@@ -318,13 +313,14 @@ function GameFlow (
     }                              //three 
     newGameBoard.ifEnd();
     console.log('playerdef moves: ' + getPlayerMoves());
+    newTest = whoWin(game.getPlayerMoves());
     newTest.ifWinner();
     switchPlayer();
     printTurn();
   } 
   
 
-  return {getPlayerName, getActivePlayer, makeMove, getPlayerMoves, printTurn,receivePlayersMoves}
+  return {getPlayerName, getActivePlayer, makeMove, getPlayerMoves, printTurn, receivePlayersMoves, resetAll}
 }
 
 
