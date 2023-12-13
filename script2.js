@@ -101,7 +101,7 @@ Remember, the key to learning is not just in writing code but also in understand
 
 
 //gameboard
-const game = GameFlow();
+
 
 
 function Gameboard () {
@@ -137,49 +137,47 @@ function Gameboard () {
     return {getBoard, fillBoard, emptyBoard, ifEnd};
 }
 
-const playerArr = [0, 4, 8];
 
-function testWin (arr) {
-    const sequences = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],   
-    ];
+const whoWin = function (arr) {
+  const sequences = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],  
+  ]
 
-    let testArr = arr;
+  let testArr = arr;
+  let arrBool;
 
-    for(let i = 0; i < sequences.length; i++){
-      for(let j = 0; i < sequences[j].length; i++) {
-        for (let x = 0; x < testArr.length; i++){
-          if (sequences[i][j] === testArr[x]) {
-            countArr.push(countArr[x]);
-          }
-        }
+
+      const arrComparison = (firstArr, secondArr) => {
+  firstArr.sort();
+  secondArr.sort();
+  return firstArr + "" == secondArr + "";
+  }
+
+  const ifWinner = () => {
+    if (testArr.length < 3) {
+      return
+  }
+      for(let i = 0; i < sequences.length; i++){
+        arrBool = arrComparison(sequences[i], testArr);
+        if (arrBool === true) {
+            console.log('Player is a winner');
       }
     }
+  }
 
-    let countArr = [];
-
-    const testForWin = () => {
-      if (countArr.length === 3) {
-        console.log(`${game.getActivePlayer} is a winner.`);
-      }
-    }
-/*     const compareArrays = (a, b) => 
-    a.length === b.length &&
-    a.every((element, index) => element === b[index]);
-      
-    const getBoard = () => board;
- */
-    return {testForWin};
+  return {ifWinner};
 }
 
-const newTest = testWin(game.getPlayerMoves);
+const game = GameFlow();
+
+const newTest = whoWin(game.getPlayerMoves());
 
 
 /* function formSequences () {
@@ -320,7 +318,7 @@ function GameFlow (
     }                              //three 
     newGameBoard.ifEnd();
     console.log('playerdef moves: ' + getPlayerMoves());
-    newTest.testForWin();
+    newTest.ifWinner();
     switchPlayer();
     printTurn();
   } 
@@ -328,6 +326,8 @@ function GameFlow (
 
   return {getPlayerName, getActivePlayer, makeMove, getPlayerMoves, printTurn,receivePlayersMoves}
 }
+
+
 
 game.printTurn();
 const plMoves = game;
