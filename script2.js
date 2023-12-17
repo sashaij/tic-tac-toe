@@ -94,7 +94,101 @@ Remember, the key to learning is not just in writing code but also in understand
 
 //gameboard
 
+/* 
 
+    _toggleStatus (e) {
+        if(!e.target.classList.contains('status')){
+            return;
+           } else {  
+            const btn = e.target;
+            const elem = btn.closest('button.status');
+            const elemIndex = btn.closest('div.card');
+            const indexAttribute = Number(elemIndex.getAttribute('data-index-number'))
+            if (elem.innerHTML === 'Read') { //asign new status for dom and obj
+                elem.innerHTML = this.books[indexAttribute].status = "Haven't read yet";
+                elem.style.backgroundColor = '#FF8F8F'; 
+            } else if (elem.innerHTML === "Haven't read yet") {
+                elem.innerHTML = this.books[indexAttribute].status = "Read";
+                elem.style.backgroundColor = '#9ADE7B'; 
+            }
+            }
+    }
+*/
+const cross = document.createElement('div.mark-container');
+cross.innerHTML = `
+<svg fill="#9f43d0" width="800px" height="800px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" stroke="#9f43d0">
+
+<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+
+<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+
+<g id="SVGRepo_iconCarrier"> <path d="M18.8,16l5.5-5.5c0.8-0.8,0.8-2,0-2.8l0,0C24,7.3,23.5,7,23,7c-0.5,0-1,0.2-1.4,0.6L16,13.2l-5.5-5.5 c-0.8-0.8-2.1-0.8-2.8,0C7.3,8,7,8.5,7,9.1s0.2,1,0.6,1.4l5.5,5.5l-5.5,5.5C7.3,21.9,7,22.4,7,23c0,0.5,0.2,1,0.6,1.4 C8,24.8,8.5,25,9,25c0.5,0,1-0.2,1.4-0.6l5.5-5.5l5.5,5.5c0.8,0.8,2.1,0.8,2.8,0c0.8-0.8,0.8-2.1,0-2.8L18.8,16z"/> </g>
+
+</svg>
+                  `
+
+const gridContainer = document.querySelector('.grid-body');
+const gridButton = document.querySelectorAll('.grid-button');
+
+for (i = 0; i < gridButton.length; i++){
+  gridButton[i].addEventListener('click',  placeMark
+);
+}
+
+
+function placeMark (e) {
+  if(!e.target.classList.contains('grid-button')){
+    return;
+   } 
+
+   console.log('this works');
+   console.log(e.target.closest('div.cell-container'));
+
+   const container = e.target.closest('div.cell-container');
+
+   container.innerHTML = 
+   `
+    <svg fill="#9f43d0" width="100px" height="100px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" stroke="#9f43d0">
+
+<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+
+<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+
+<g id="SVGRepo_iconCarrier"> <path d="M18.8,16l5.5-5.5c0.8-0.8,0.8-2,0-2.8l0,0C24,7.3,23.5,7,23,7c-0.5,0-1,0.2-1.4,0.6L16,13.2l-5.5-5.5 c-0.8-0.8-2.1-0.8-2.8,0C7.3,8,7,8.5,7,9.1s0.2,1,0.6,1.4l5.5,5.5l-5.5,5.5C7.3,21.9,7,22.4,7,23c0,0.5,0.2,1,0.6,1.4 C8,24.8,8.5,25,9,25c0.5,0,1-0.2,1.4-0.6l5.5-5.5l5.5,5.5c0.8,0.8,2.1,0.8,2.8,0c0.8-0.8,0.8-2.1,0-2.8L18.8,16z"/> </g>
+
+</svg>
+                      `
+
+/*     const btn = e.target;
+    const elem = btn.closest('div.cell-container');
+    elem.innerHTML = `
+    <svg fill="#9f43d0" width="800px" height="800px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" stroke="#9f43d0">
+
+<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+
+<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+
+<g id="SVGRepo_iconCarrier"> <path d="M18.8,16l5.5-5.5c0.8-0.8,0.8-2,0-2.8l0,0C24,7.3,23.5,7,23,7c-0.5,0-1,0.2-1.4,0.6L16,13.2l-5.5-5.5 c-0.8-0.8-2.1-0.8-2.8,0C7.3,8,7,8.5,7,9.1s0.2,1,0.6,1.4l5.5,5.5l-5.5,5.5C7.3,21.9,7,22.4,7,23c0,0.5,0.2,1,0.6,1.4 C8,24.8,8.5,25,9,25c0.5,0,1-0.2,1.4-0.6l5.5-5.5l5.5,5.5c0.8,0.8,2.1,0.8,2.8,0c0.8-0.8,0.8-2.1,0-2.8L18.8,16z"/> </g>
+
+</svg>
+                      ` */
+}
+
+gridContainer.addEventListener('click', e => {
+  console.log(e);
+});
+
+
+
+function whichMark (player) {
+  const playerName = player.name;
+  let targetImg = document.querySelector(`#${a}`);
+  const selctMark = () => {
+    if (playerName === 'Player One') {
+      
+    }
+  }
+}
 
 function Gameboard () {
     const rows = 3;
@@ -168,9 +262,7 @@ const whoWin = function (arr) {
 }
 
 const game = GameFlow();
-
 let newTest;
-
 const newGame = () => {
   game.resetAll();
 }
