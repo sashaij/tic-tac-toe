@@ -94,89 +94,87 @@ Remember, the key to learning is not just in writing code but also in understand
 
 //gameboard
 
-/* 
+const game = GameFlow();
 
-    _toggleStatus (e) {
-        if(!e.target.classList.contains('status')){
-            return;
-           } else {  
-            const btn = e.target;
-            const elem = btn.closest('button.status');
-            const elemIndex = btn.closest('div.card');
-            const indexAttribute = Number(elemIndex.getAttribute('data-index-number'))
-            if (elem.innerHTML === 'Read') { //asign new status for dom and obj
-                elem.innerHTML = this.books[indexAttribute].status = "Haven't read yet";
-                elem.style.backgroundColor = '#FF8F8F'; 
-            } else if (elem.innerHTML === "Haven't read yet") {
-                elem.innerHTML = this.books[indexAttribute].status = "Read";
-                elem.style.backgroundColor = '#9ADE7B'; 
-            }
-            }
-    }
-*/
-const cross = document.createElement('div.mark-container');
-cross.innerHTML = `
-<svg fill="#9f43d0" width="800px" height="800px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" stroke="#9f43d0">
+function setMark () {
 
-<g id="SVGRepo_bgCarrier" stroke-width="0"/>
+  const gridButton = document.querySelectorAll('.grid-button');
+  let buttonAttribute;
 
-<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+    const placeMark = (e) => {
+        
 
-<g id="SVGRepo_iconCarrier"> <path d="M18.8,16l5.5-5.5c0.8-0.8,0.8-2,0-2.8l0,0C24,7.3,23.5,7,23,7c-0.5,0-1,0.2-1.4,0.6L16,13.2l-5.5-5.5 c-0.8-0.8-2.1-0.8-2.8,0C7.3,8,7,8.5,7,9.1s0.2,1,0.6,1.4l5.5,5.5l-5.5,5.5C7.3,21.9,7,22.4,7,23c0,0.5,0.2,1,0.6,1.4 C8,24.8,8.5,25,9,25c0.5,0,1-0.2,1.4-0.6l5.5-5.5l5.5,5.5c0.8,0.8,2.1,0.8,2.8,0c0.8-0.8,0.8-2.1,0-2.8L18.8,16z"/> </g>
+        if(!e.target.classList.contains('grid-button')){
+          return;
+        } 
+      
+        let actPlayer = game.getPlayerName();
+        //console.log('this works');
+        //console.log(e.target.closest('div.cell-container'));
+      
+        const container = e.target.closest('div.cell-container');
+      
+        if (actPlayer === "Player One") {
+            container.innerHTML = 
+        `
+          <svg fill="#9f43d0" width="100px" height="100px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" stroke="#9f43d0">
+      
+      <g id="SVGRepo_bgCarrier" stroke-width="0"/>
+      
+      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+      
+      <g id="SVGRepo_iconCarrier"> <path d="M18.8,16l5.5-5.5c0.8-0.8,0.8-2,0-2.8l0,0C24,7.3,23.5,7,23,7c-0.5,0-1,0.2-1.4,0.6L16,13.2l-5.5-5.5 c-0.8-0.8-2.1-0.8-2.8,0C7.3,8,7,8.5,7,9.1s0.2,1,0.6,1.4l5.5,5.5l-5.5,5.5C7.3,21.9,7,22.4,7,23c0,0.5,0.2,1,0.6,1.4 C8,24.8,8.5,25,9,25c0.5,0,1-0.2,1.4-0.6l5.5-5.5l5.5,5.5c0.8,0.8,2.1,0.8,2.8,0c0.8-0.8,0.8-2.1,0-2.8L18.8,16z"/> </g>
+      
+      </svg>
+                            `
+        } else {
+          container.innerHTML = `
+          <svg fill="#80e77e" width="100px" height="100px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#80e77e">
+      
+          <g id="SVGRepo_bgCarrier" stroke-width="0"/>
+          
+          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+          
+          <g id="SVGRepo_iconCarrier"> <title>circle</title> <path d="M0 16q0 3.264 1.28 6.208t3.392 5.12 5.12 3.424 6.208 1.248 6.208-1.248 5.12-3.424 3.392-5.12 1.28-6.208-1.28-6.208-3.392-5.12-5.088-3.392-6.24-1.28q-3.264 0-6.208 1.28t-5.12 3.392-3.392 5.12-1.28 6.208zM4 16q0-3.264 1.6-6.016t4.384-4.352 6.016-1.632 6.016 1.632 4.384 4.352 1.6 6.016-1.6 6.048-4.384 4.352-6.016 1.6-6.016-1.6-4.384-4.352-1.6-6.048z"/> </g>
+          
+          </svg>
+          `
+        } 
+        /* buttonAttribute = Number(gridButton[i].getAttribute('data-index')) */
+          game.makeMove(buttonAttribute);
+        //* here, but how to
+        //  display number correctly?
+      }
 
-</svg>
-                  `
+        const getMark = (e) => {
+          let element = e.target;
+          let index = element.getAttribute('data-index');
+          buttonAttribute = index;
+      }
 
-const gridContainer = document.querySelector('.grid-body');
-const gridButton = document.querySelectorAll('.grid-button');
+      
 
-for (i = 0; i < gridButton.length; i++){
-  gridButton[i].addEventListener('click',  placeMark
-);
+      for (i = 0; i < gridButton.length; i++){
+        gridButton[i].addEventListener('click',
+        getMark
+        )
+        gridButton[i].addEventListener('click',   placeMark
+      );
+      
+      /* gridButton[i].addEventListener('click', getMark(i)) */
+        //where to put makemove (without ev list)
+        //to display number right and not
+        //and not trigger func immidetly
+      
+      }
+
+  
+  
+
+  return {placeMark, getMark}
 }
 
 
-function placeMark (e) {
-  if(!e.target.classList.contains('grid-button')){
-    return;
-   } 
-
-   console.log('this works');
-   console.log(e.target.closest('div.cell-container'));
-
-   const container = e.target.closest('div.cell-container');
-
-   container.innerHTML = 
-   `
-    <svg fill="#9f43d0" width="100px" height="100px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" stroke="#9f43d0">
-
-<g id="SVGRepo_bgCarrier" stroke-width="0"/>
-
-<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
-
-<g id="SVGRepo_iconCarrier"> <path d="M18.8,16l5.5-5.5c0.8-0.8,0.8-2,0-2.8l0,0C24,7.3,23.5,7,23,7c-0.5,0-1,0.2-1.4,0.6L16,13.2l-5.5-5.5 c-0.8-0.8-2.1-0.8-2.8,0C7.3,8,7,8.5,7,9.1s0.2,1,0.6,1.4l5.5,5.5l-5.5,5.5C7.3,21.9,7,22.4,7,23c0,0.5,0.2,1,0.6,1.4 C8,24.8,8.5,25,9,25c0.5,0,1-0.2,1.4-0.6l5.5-5.5l5.5,5.5c0.8,0.8,2.1,0.8,2.8,0c0.8-0.8,0.8-2.1,0-2.8L18.8,16z"/> </g>
-
-</svg>
-                      `
-
-/*     const btn = e.target;
-    const elem = btn.closest('div.cell-container');
-    elem.innerHTML = `
-    <svg fill="#9f43d0" width="800px" height="800px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" stroke="#9f43d0">
-
-<g id="SVGRepo_bgCarrier" stroke-width="0"/>
-
-<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
-
-<g id="SVGRepo_iconCarrier"> <path d="M18.8,16l5.5-5.5c0.8-0.8,0.8-2,0-2.8l0,0C24,7.3,23.5,7,23,7c-0.5,0-1,0.2-1.4,0.6L16,13.2l-5.5-5.5 c-0.8-0.8-2.1-0.8-2.8,0C7.3,8,7,8.5,7,9.1s0.2,1,0.6,1.4l5.5,5.5l-5.5,5.5C7.3,21.9,7,22.4,7,23c0,0.5,0.2,1,0.6,1.4 C8,24.8,8.5,25,9,25c0.5,0,1-0.2,1.4-0.6l5.5-5.5l5.5,5.5c0.8,0.8,2.1,0.8,2.8,0c0.8-0.8,0.8-2.1,0-2.8L18.8,16z"/> </g>
-
-</svg>
-                      ` */
-}
-
-gridContainer.addEventListener('click', e => {
-  console.log(e);
-});
 
 
 
@@ -261,7 +259,8 @@ const whoWin = function (arr) {
   return {ifWinner};
 }
 
-const game = GameFlow();
+
+
 let newTest;
 const newGame = () => {
   game.resetAll();
@@ -399,7 +398,6 @@ function GameFlow (
     activePlayer.moves.push(move);
     newGameBoard.fillBoard(move);
     console.log('overall moves: ' + newGameBoard.getBoard());
-    
     if (activePlayer.moves.length > 3) {   //delete first item in
       activePlayer.moves.shift();   //in moves array if it exceeds
     }                              //three 
@@ -427,16 +425,7 @@ const putMark = (num) => {
 };
 
 
-/* game.makeMove(0);
-game.makeMove(1);
-game.makeMove(4);
-game.makeMove(2);
-game.makeMove(8);
-game.makeMove(5);
-game.makeMove(7);
-game.makeMove(9);
-game.makeMove(6); */
-
+const gridMark = setMark();
 console.log('player moves: ' + game.getPlayerMoves());
 
 //game flow
