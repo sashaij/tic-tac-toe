@@ -70,6 +70,7 @@
 //gameboard
 
 const game = GameFlow();
+const newGameBoard = Gameboard();
 
 function setMark () {
 
@@ -144,10 +145,16 @@ function setMark () {
 }
 
 function statusDisplay () {
+  let board = newGameBoard.getBoard()
+  const gameDisplay = document.querySelector('.display');
+
   const showStatus = () => {
-    const gameDisplay = document.querySelector('.display');
-  const currentPlayer = game.getActivePlayer().name;
-  gameDisplay.innerHTML = `It's ${currentPlayer}'s turn now. Make a turn.`
+    if (board.length < 9) {
+       const currentPlayer = game.getActivePlayer().name;
+    gameDisplay.innerHTML = `It's ${currentPlayer}'s turn now. Make a turn.`
+    } else if (board.length >= 9) {
+      gameDisplay.innerHTML = `It's a draw. Game over.`
+    }
   }
   return {showStatus};
 }
@@ -327,7 +334,7 @@ function GameFlow (
   };
 
   const getActivePlayer = () => activePlayer;
-  const newGameBoard = Gameboard();
+  
   //add moves to the moves array 
   //and switch player
   
