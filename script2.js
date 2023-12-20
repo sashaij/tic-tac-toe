@@ -50,7 +50,6 @@
 
 
 //tasks
-  //display who's turn it is now
   //display when the game is over
   //and display winner
   //or draw
@@ -68,8 +67,110 @@
      //and removes (.remove();) it
 
 //gameboard
+const newGameBoard = Gameboard();
+//game ----------
+function GameFlow (
+  playerOneName = 'Player One',
+  playerTwoName = 'Player Two'
+  ) {
+  
+  const players = [
+    {
+      name: playerOneName,
+      moves: [],
+    },
+    {
+      name: playerTwoName,
+      moves: [],
+    },
+  ];
+  
+  let activePlayer = players[0];
+  
+  const switchPlayer = () => {
+    activePlayer = activePlayer === players[0] ? players[1] : players[0];
+  };
+  
+  const getActivePlayer = () => activePlayer;
+  
+  newGameBoard.statusDisplay();
+  //add moves to the moves array 
+  //and switch player
+  
+  const resetAll = () => { //reset all to default
+    activePlayer = players[0];
+    players[0].moves = 
+    players[1].moves = [];
+    newGameBoard.emptyBoard();
+  }
+  
+  
+  
+  
+  //
+  const receivePlayersMoves = (i) => players[i].moves;
+  //
+  
+  const printTurn = () => console.log(`It's ${activePlayer.name}'s move now. Make a move`);
+  const getPlayerName = () => activePlayer.name;
+  const getPlayerMoves = () => activePlayer.moves;
+  
+  const makeMove = (move) => {
+    activePlayer.moves.push(move);
+    newGameBoard.fillBoard(move);
+    console.log('overall moves: ' + newGameBoard.getBoard());
+    if (activePlayer.moves.length > 3) {   //delete first item in
+      activePlayer.moves.shift();   //in moves array if it exceeds
+    }                              //three 
+    newGameBoard.ifEnd();
+    console.log('playerdef moves: ' + getPlayerMoves());
+    newTest = whoWin(game.getPlayerMoves());
+    newTest.ifWinner();
+    switchPlayer();
+    newGameBoard.statusDisplay();
+    printTurn();
+  } 
+  
+  
+  return {getPlayerName, getActivePlayer, makeMove, getPlayerMoves, printTurn, receivePlayersMoves, resetAll}
+  }
+  
+
 
 const game = GameFlow();
+
+function Gameboard () {
+  const gameDisplay = document.querySelector('.display');
+  let board = [];
+
+  const fillBoard = (num) => board.push(num);
+
+  const statusDisplay = () => {
+      if (board.length < 9) {
+        const currentPlayer = game.getActivePlayer().name;
+      gameDisplay.innerHTML = `It's ${currentPlayer}'s turn now. Make a turn.`
+      } else if (board.length >= 9) {
+        console.log('Game over. It\'s a draw');
+      }
+    }
+  
+
+  //function that defines if 
+  //moves quantity is exceeded and 
+  //round is over
+  const ifEnd = () => {
+    
+  }
+
+  const getBoard = () => board;
+  const emptyBoard = () => board = [];
+
+  return {getBoard, statusDisplay, emptyBoard, ifEnd};
+}
+
+
+
+
 
 function setMark () {
 
@@ -104,7 +205,7 @@ function setMark () {
                             `
         } else {
           container.innerHTML = `
-          <svg fill="#80e77e" width="100px" height="100px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#80e77e">
+          <svg fill="#80e77e" width="90px" height="90px" viewBox="0 0 34 34" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#80e77e">
       
           <g id="SVGRepo_bgCarrier" stroke-width="0"/>
           
@@ -143,37 +244,19 @@ function setMark () {
   return {placeMark, getMark}
 }
 
-function statusDisplay () {
-  const showStatus = () => {
-    const gameDisplay = document.querySelector('.display');
-  const currentPlayer = game.getActivePlayer().name;
-  gameDisplay.innerHTML = `It's ${currentPlayer}'s turn now. Make a turn.`
-  }
-  return {showStatus};
-}
 
-const displayStatus = statusDisplay();
-displayStatus.showStatus();
 
-function Gameboard () {
-    let board = [];
 
-    const fillBoard = (num) => board.push(num);
 
-    //function that defines if 
-    //moves quantity is exceeded and 
-    //round is over
-    const ifEnd = () => {
-      if (board.length >= 9) {
-        console.log('Game over');
-      }
-    }
+game.printTurn();
+const plMoves = game;
 
-    const getBoard = () => board;
-    const emptyBoard = () => board = [];
+const putMark = (num) => {
+  game.makeMove(num);
+  
+  console.log('pl moves: ' + plMoves.getPlayerMoves());
+};
 
-    return {getBoard, fillBoard, emptyBoard, ifEnd};
-}
 
 
 //function to check if there is a winner
@@ -304,77 +387,8 @@ for (i = 0; i < winSequences.getSeq().length; i++) {
 
 //player
 
-function GameFlow (
-  playerOneName = 'Player One',
-  playerTwoName = 'Player Two'
-) {
 
-  const players = [
-    {
-      name: playerOneName,
-      moves: [],
-    },
-    {
-      name: playerTwoName,
-      moves: [],
-    },
-  ];
-
-  let activePlayer = players[0];
-
-  const switchPlayer = () => {
-    activePlayer = activePlayer === players[0] ? players[1] : players[0];
-  };
-
-  const getActivePlayer = () => activePlayer;
-  const newGameBoard = Gameboard();
-  //add moves to the moves array 
-  //and switch player
-  
-  const resetAll = () => { //reset all to default
-    activePlayer = players[0];
-    players[0].moves = 
-    players[1].moves = [];
-    newGameBoard.emptyBoard();
-  }
-
-  //
-  const receivePlayersMoves = (i) => players[i].moves;
-  //
-  
-  const printTurn = () => console.log(`It's ${activePlayer.name}'s move now. Make a move`);
-  const getPlayerName = () => activePlayer.name;
-  const getPlayerMoves = () => activePlayer.moves;
-  
-  const makeMove = (move) => {
-    activePlayer.moves.push(move);
-    newGameBoard.fillBoard(move);
-    console.log('overall moves: ' + newGameBoard.getBoard());
-    if (activePlayer.moves.length > 3) {   //delete first item in
-      activePlayer.moves.shift();   //in moves array if it exceeds
-    }                              //three 
-    newGameBoard.ifEnd();
-    console.log('playerdef moves: ' + getPlayerMoves());
-    newTest = whoWin(game.getPlayerMoves());
-    newTest.ifWinner();
-    switchPlayer();
-    displayStatus.showStatus();
-    printTurn();
-  } 
-  
-
-  return {getPlayerName, getActivePlayer, makeMove, getPlayerMoves, printTurn, receivePlayersMoves, resetAll}
-}
-
-game.printTurn();
-const plMoves = game;
-
-const putMark = (num) => {
-  game.makeMove(num);
-  
-  console.log('pl moves: ' + plMoves.getPlayerMoves());
-};
-
+//==================gameflow==========================
 
 const gridMark = setMark();
 console.log('player moves: ' + game.getPlayerMoves());
