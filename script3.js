@@ -28,12 +28,22 @@ function Gameboard () {
     }
 
 
+    const ifDraw = () => {
+        if (board.length >= 9) {
+            console.log('It\'s a draw. Game over');
+            return true;
+        }
+    }
+
+
     const fillBoard = (num) => {
         //stop execution if board is 
         //the entire board is filled
         if (board.length >= 9) return;
         board.push(num);
     } 
+
+    
 
     //method to get win combinations;
     const getSequences = () => sequences;
@@ -42,7 +52,7 @@ function Gameboard () {
     //method of emptying board;
     const emptyBoard = () => board = [];
 
-    return {getBoard, getSequences, fillBoard, emptyBoard, winnerTest};
+    return {getBoard, getSequences, fillBoard, emptyBoard, winnerTest, ifDraw};
 }
 
 
@@ -52,7 +62,7 @@ function GameFlow (
     playerTwoName = 'Player Two'
   ) {
     
-    const board = Gameboard();
+    
 
     const players = [
       {
@@ -65,7 +75,7 @@ function GameFlow (
       },
     ];
 
-    const gameBoard = Gameboard();
+    const board = Gameboard();
     const uInterface = UserInterface();
   
     let activePlayer = players[0];
@@ -103,14 +113,20 @@ function GameFlow (
       if (activePlayer.moves.length > 3) {   
         activePlayer.moves.shift();   
       }  
+      //check if all cells are filled
+      if(board.ifDraw()) {
+        return;
+      }
       //check if there is a winner
-      if (gameBoard.winnerTest(getPlayerMoves(), board.getSequences())) {
+      if (board.winnerTest(getPlayerMoves(), board.getSequences())) {
         console.log(`${getPlayerName()} is a winner.`);
         return;
         const boardDisplay = uInterface.getDisplay();
         boardDisplay.innerHTML = `${getPlayerName} is a winner. Game over.`
       }
+      //switch active player
       switchPlayer();
+      //show who's turn it is now
       printTurn();
     } 
     
