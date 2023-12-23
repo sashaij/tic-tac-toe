@@ -139,6 +139,7 @@ function GameFlow (
 
 const game = GameFlow();
 
+
 function Gameboard () {
   const gameDisplay = document.querySelector('.display');
   let board = [];
@@ -244,6 +245,20 @@ function setMark () {
   return {placeMark, getMark}
 }
 
+function statusDisplay () {
+  let board = newGameBoard.getBoard()
+  const gameDisplay = document.querySelector('.display');
+
+  const showStatus = () => {
+    if (board.length < 9) {
+       const currentPlayer = game.getActivePlayer().name;
+    gameDisplay.innerHTML = `It's ${currentPlayer}'s turn now. Make a turn.`
+    } else if (board.length >= 9) {
+      gameDisplay.innerHTML = `It's a draw. Game over.`
+    }
+  }
+  return {showStatus};
+}
 
 
 
@@ -386,6 +401,68 @@ for (i = 0; i < winSequences.getSeq().length; i++) {
 
 
 //player
+
+function GameFlow (
+  playerOneName = 'Player One',
+  playerTwoName = 'Player Two'
+) {
+
+  const players = [
+    {
+      name: playerOneName,
+      moves: [],
+    },
+    {
+      name: playerTwoName,
+      moves: [],
+    },
+  ];
+
+  let activePlayer = players[0];
+
+  const switchPlayer = () => {
+    activePlayer = activePlayer === players[0] ? players[1] : players[0];
+  };
+
+  const getActivePlayer = () => activePlayer;
+  
+  //add moves to the moves array 
+  //and switch player
+  
+  const resetAll = () => { //reset all to default
+    activePlayer = players[0];
+    players[0].moves = 
+    players[1].moves = [];
+    newGameBoard.emptyBoard();
+  }
+
+  //
+  const receivePlayersMoves = (i) => players[i].moves;
+  //
+  
+  const printTurn = () => console.log(`It's ${activePlayer.name}'s move now. Make a move`);
+  const getPlayerName = () => activePlayer.name;
+  const getPlayerMoves = () => activePlayer.moves;
+  
+  const makeMove = (move) => {
+    activePlayer.moves.push(move);
+    newGameBoard.fillBoard(move);
+    console.log('overall moves: ' + newGameBoard.getBoard());
+    if (activePlayer.moves.length > 3) {   //delete first item in
+      activePlayer.moves.shift();   //in moves array if it exceeds
+    }                              //three 
+    newGameBoard.ifEnd();
+    console.log('playerdef moves: ' + getPlayerMoves());
+    newTest = whoWin(game.getPlayerMoves());
+    newTest.ifWinner();
+    switchPlayer();
+    displayStatus.showStatus();
+    printTurn();
+  } 
+  
+
+  return {getPlayerName, getActivePlayer, makeMove, getPlayerMoves, printTurn, receivePlayersMoves, resetAll}
+}
 
 
 //==================gameflow==========================
