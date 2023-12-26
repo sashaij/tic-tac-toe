@@ -1,6 +1,8 @@
 const game = GameFlow();
 const userInterface = UserInterface();
-userInterface.placeMark();
+const board = Gameboard();
+
+userInterface.fillDisplay();
 //gameboard
    
 function Gameboard () {
@@ -76,7 +78,7 @@ function GameFlow (
       },
     ];
 
-    const board = Gameboard();
+    
     const uInterface = UserInterface();
   
     let activePlayer = players[0];
@@ -118,17 +120,18 @@ function GameFlow (
       if(board.ifDraw()) {
         return;
       }
+      //display who's turn it is,
+      //winner or draw
+      userInterface.fillDisplay();
       //check if there is a winner
       if (board.winnerTest(getPlayerMoves(), board.getSequences())) {
         console.log(`${getPlayerName()} is a winner.`);
-        return;
-        const boardDisplay = uInterface.getDisplay();
-        boardDisplay.innerHTML = `${getPlayerName} is a winner. Game over.`
       }
       //switch active player
       switchPlayer();
       //show who's turn it is now
       printTurn();
+      
     } 
     
   
@@ -143,6 +146,22 @@ function UserInterface () {
     let buttonAttribute;
 
     const getDisplay = () => display;
+
+    const fillDisplay = () => {
+
+        let gBoard = board.getBoard();
+
+            if (gBoard.length < 9 && board.winnerTest(game.getPlayerMoves(), board.getSequences())) {
+            display.innerHTML = `${game.getPlayerName()} is a winner.`
+            return;
+          } else if (gBoard.length < 9 && !board.winnerTest(game.getPlayerMoves(), board.getSequences())) {
+            const currentPlayer = game.getActivePlayer().name;
+            display.innerHTML = `It's ${currentPlayer}'s turn now. Make a turn.`
+          } else if (gBoard.length >= 9) {
+            display.innerHTML = `It's a draw. Game over.`
+          }
+      }
+      
 
     const placeMark = (e) => {
               
@@ -204,5 +223,5 @@ function UserInterface () {
         }
       
 
-    return {getDisplay, placeMark};
+    return {getDisplay, placeMark, fillDisplay};
 }
