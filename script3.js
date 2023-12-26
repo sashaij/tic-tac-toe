@@ -146,6 +146,12 @@ function UserInterface () {
     let buttonAttribute;
 
     const getDisplay = () => display;
+      //hide (disable) grid buttons
+      const disGridButtons = () => {
+        for (let i = 0; i < gridButton.length; i++) {
+            gridButton[i].style.display = 'none';
+        }
+      }
 
     const fillDisplay = () => {
 
@@ -153,6 +159,8 @@ function UserInterface () {
 
             if (gBoard.length < 9 && board.winnerTest(game.getPlayerMoves(), board.getSequences())) {
             display.innerHTML = `${game.getPlayerName()} is a winner.`
+            //disable all remaining buttons
+            disGridButtons();
             return;
           } else if (gBoard.length < 9 && !board.winnerTest(game.getPlayerMoves(), board.getSequences())) {
             const currentPlayer = game.getActivePlayer().name;
@@ -161,7 +169,8 @@ function UserInterface () {
             display.innerHTML = `It's a draw. Game over.`
           }
       }
-      
+
+
 
     const placeMark = (e) => {
               
