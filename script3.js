@@ -4,6 +4,7 @@ const board = Gameboard();
 
 userInterface.fillDisplay();
 //gameboard
+userInterface.startNewGame();
    
 function Gameboard () {
     let board = [];
@@ -26,17 +27,27 @@ function Gameboard () {
         for (let i = 0; i < secondArr.length; i++) {
             firstArr.sort();
             secondArr[i].sort();
-            if (firstArr + "" == secondArr[i] + "") return true;
+            if (firstArr + "" == secondArr[i] + ""){
+                return true;
+            } 
         }
     }
 
 
-    const ifDraw = () => {
+   /*  const ifDraw = () => {
         if (board.length >= 9) {
             console.log('It\'s a draw. Game over');
             return true;
         }
+    } */
+
+    const ifDraw = () => {
+        if (board.length >= 9 && !board.winnerTest(players[0].moves.concat(players[1].moves), board.getSequences())) {
+            console.log('It\'s a draw. Game over');
+            return true;
+        }
     }
+    
 
 
     const fillBoard = (num) => {
@@ -53,7 +64,7 @@ function Gameboard () {
     //method of getting the board;
     const getBoard = () => board;
     //method of emptying board;
-    const emptyBoard = () => board = [];
+    const emptyBoard = () => {board = []};
 
     return {getBoard, getSequences, fillBoard, emptyBoard, winnerTest, ifDraw};
 }
@@ -78,8 +89,6 @@ function GameFlow (
       },
     ];
 
-    
-    const uInterface = UserInterface();
   
     let activePlayer = players[0];
   
@@ -96,7 +105,12 @@ function GameFlow (
       activePlayer = players[0];
       players[0].moves = 
       players[1].moves = [];
-      newGameBoard.emptyBoard();
+      board.emptyBoard();
+      //userInterface.enGridButton();
+      //userInterface.emptyGameBoard();
+      userInterface.fillGridButtons();
+      //userInterface.fillDisplay();
+      //userInterface.placeMark();
     }
     
     const printTurn = () => console.log(`It's ${activePlayer.name}'s move now. Make a move`);
@@ -117,9 +131,9 @@ function GameFlow (
         activePlayer.moves.shift();   
       }  
       //check if all cells are filled
-      if(board.ifDraw()) {
+      /* if(board.ifDraw()) {
         return;
-      }
+      } */
       //display who's turn it is,
       //winner or draw
       userInterface.fillDisplay();
@@ -133,9 +147,13 @@ function GameFlow (
       printTurn();
       
     } 
+
+    const newGame = () => {
+        resetAll();
+    }
     
   
-    return {getPlayerName, getActivePlayer, makeMove, getPlayerMoves, printTurn, resetAll}
+    return {getPlayerName, getActivePlayer, makeMove, getPlayerMoves, printTurn, resetAll, newGame}
   }
 
 //UI
@@ -143,34 +161,80 @@ function UserInterface () {
     const display = document.querySelector('.display');
     //select all grid button elements
     const gridButton = document.querySelectorAll('.grid-button');
+    const cellContainers = document.querySelectorAll(".cell-container");
+    const newGameButton = document.querySelector('.new-game');
     let buttonAttribute;
 
     const getDisplay = () => display;
+
+    const getNewGame = () => newGameButton;
+
+    //erase all marks, empty board
+    const emptyGameBoard = () => {
+        for (let i = 0; i < cellContainers.length; i++){
+            cellContainers[i].innerHTML = '';
+        }
+    }
+
       //hide (disable) grid buttons
-      const disGridButtons = () => {
+    const disGridButtons = () => {
         for (let i = 0; i < gridButton.length; i++) {
             gridButton[i].style.display = 'none';
         }
-      }
+    }
 
-    const fillDisplay = () => {
+    const enGridButton = () => {
+        for (let i = 0; i < gridButton.length; i++) {
+            gridButton[i].style.display = 'block';
+        }
+    }
 
-        let gBoard = board.getBoard();
-
-            if (gBoard.length < 9 && board.winnerTest(game.getPlayerMoves(), board.getSequences())) {
+/*     const fillDisplay = () => {
+            if(board.ifDraw() && board.winnerTest(game.getPlayerMoves(), board.getSequences())){
+                display.innerHTML = `${game.getPlayerName()} is a winner.`
+                return;
+            } else if (board.ifDraw() && !board.winnerTest(game.getPlayerMoves(), board.getSequences())) {
+            display.innerHTML = `It's a draw. Game over.`
+          } else if (board.winnerTest(game.getPlayerMoves(), board.getSequences()) ) {
             display.innerHTML = `${game.getPlayerName()} is a winner.`
             //disable all remaining buttons
             disGridButtons();
             return;
-          } else if (gBoard.length < 9 && !board.winnerTest(game.getPlayerMoves(), board.getSequences())) {
+          } else if (!board.winnerTest(game.getPlayerMoves(), board.getSequences())) {
             const currentPlayer = game.getActivePlayer().name;
             display.innerHTML = `It's ${currentPlayer}'s turn now. Make a turn.`
-          } else if (gBoard.length >= 9) {
-            display.innerHTML = `It's a draw. Game over.`
           }
-      }
+      } */
+/* 
+        v2----------
+      const fillDisplay = () => {
+        const currentPlayer = game.getActivePlayer().name;
+    
+        if (board.winnerTest(game.getPlayerMoves(), board.getSequences())) {
+            display.innerHTML = `${game.getPlayerName()} is a winner.`;
+            disGridButtons(); // Disable all remaining buttons
+        } else if (board.ifDraw() && !board.winnerTest(game.getPlayerMoves(), board.getSequences())) {
+            display.innerHTML = `It's a draw. Game over.`;
+            disGridButtons(); // Disable all remaining buttons
+        } else {
+            display.innerHTML = `It's ${currentPlayer}'s turn now. Make a move.`;
+        }
+    };
+ */
 
-
+    const fillDisplay = () => {
+        const currentPlayer = game.getActivePlayer().name;
+    
+        if (board.winnerTest(game.getPlayerMoves(), board.getSequences())) {
+            display.innerHTML = `${game.getPlayerName()} is a winner.`;
+            disGridButtons(); // Disable all remaining buttons
+        } else if (board.getBoard().length === 9) {
+            display.innerHTML = `It's a draw. Game over.`;
+            disGridButtons(); // Disable all remaining buttons
+        } else {
+            display.innerHTML = `It's ${currentPlayer}'s turn now. Make a move.`;
+        }
+    };
 
     const placeMark = (e) => {
               
@@ -230,7 +294,21 @@ function UserInterface () {
               gridButton[i].addEventListener('click',   placeMark
             );
         }
-      
 
-    return {getDisplay, placeMark, fillDisplay};
+        const fillGridButtons = () => {
+            for (let i = 0; i < cellContainers.length; i++) {
+                let cellButton = document.createElement('btn');
+                cellButton.setAttribute('data-index',`${i}`);
+                cellContainers[i].appendChild(cellButton);
+                /* cellContainers[i].innerHTML = `
+                <btn class="grid-button" data-index="${i}">""</btn>
+                ` */
+            }
+        }
+      
+        const startNewGame = () => {
+            newGameButton.addEventListener('click', game.newGame);
+        }
+
+    return {getDisplay, placeMark, fillDisplay, disGridButtons, enGridButton, emptyGameBoard, getNewGame, startNewGame, fillGridButtons};
 }
